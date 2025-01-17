@@ -21,3 +21,6 @@ CMD ["npm", "start"]
 
 #Escriobir en consola para construir la imagen
 # ~ docker build -t [name del proyecto] . ~   --> "No olvidar el punto al final"
+#para levantar el contenedor docker run -p 8081:8080 holamundillo
+
+#para loguearte docker login
