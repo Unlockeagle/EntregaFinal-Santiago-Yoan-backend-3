@@ -1,0 +1,197 @@
+paths:
+  /api/users:
+    get:
+      summary: 🎅 Obtenemos todos los usuarios de la base de datos.
+      tags:
+        - Users
+      responses:
+        "200":
+          description: ✅ Obtinene todos los usuarios exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/User"
+        "500":
+          description: ❌ Error interno del servidor
+    post:
+      summary: 🤖 Este endpoint crea un usuario
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/createUser"
+      responses:
+        "201":
+          description: ✅ Usuario creado correctamente
+        "401":
+          description: ⚠️ Falta informacion del usuario
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/User"
+        "500":
+          description: ❌ Error interno del servidor
+  /api/users/{uid}:
+    get:
+      summary: 🔍 Obtiene un solo usuario por su ID
+      tags:
+        - Users
+      parameters:
+      - name: uid
+        in: path
+        required: true
+        description: Id del usuario que se quiere buscar
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ✅ Usuario encontrado exitosamente
+          content:
+            application/json:
+              schema:
+              type: array
+              items:
+                $ref: "#components/schemas/User"
+        "404":
+          description: ⚠️ Usuario no encontrado
+          content:
+            application/json:
+              schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  descripion: Usuario no encontrado o no existente en la DB
+              example: "Usuario no encontrado"
+        "500":
+          description: ❌ Error interno del servidor
+    put:
+      summary: 📝 Actualiza un usuario por su ID
+      tags:
+        - Users
+      parameters:
+      - name: uid
+        in: path
+        required: true
+        description: Id del usuario que desea actualizar
+        schema:
+          type: string
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#components/requestBodies/updateUser"  
+      responses:
+        "201":
+          description: ✅ Usuario actualizado exitosamente
+        "404":
+          description: ⚠️ Usuario no encontrado
+        "500":
+          description: ❌ Error interno del servidor
+    delete:
+      summary: 🗑️ Eliminar un usuario por su ID
+      tags:
+        - Users
+      parameters:
+      - name: uid
+        in: path
+        required: true
+        description: Id del usuario a eliminar
+        schema:
+          type: string
+      responses:
+        "201":
+          description: ✅ Usuario eliminado exitosamente
+        "500":
+          description: ❌ Error en el servidor
+        
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Id autogenerado por MongoDB
+        first_name:
+          type: string
+          description: Nombre del usuario
+        last_name:
+          type: string
+          description: Apellido del usuario
+        password:
+          type: string
+          description: Password o contraseña del usuario
+      example:
+        _id: ObjectId("123456")
+        first_name: Sub
+        last_name: Zero
+        password: 1234
+  requestBodies:
+    createUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: nombre del usuario
+        last_name:
+          type: string
+          description: Apellido del usuario
+        password:
+          type: string
+          description: Password del usuario
+        email:
+          type: string
+          description: Email del usuario
+      example:
+        first_name: General
+        last_name: Kub
+        password: 1234
+        email: general.kub@example.com
+    updateUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: nombre del usuario
+        last_name:
+          type: string
+          description: Apellido del usuario
+        password:
+          type: string
+          description: Password del usuario
+        email:
+          type: string
+          description: Email del usuario
+      example:
+        first_name: General
+        last_name: Kub
+        password: 1234
+        email: general.kub@example.com
+    deleteUser:
+      type: object
+      properties:
+        _id:
+            type: ObjectId
+            description: Id autogenerado por MongoDB
+        first_name:
+          type: string
+          description: nombre del usuario
+        last_name:
+          type: string
+          description: Apellido del usuario
+        password:
+          type: string
+          description: Password del usuario
+        email:
+          type: string
+          description: Email del usuario
+      example:
+        _id: 1234
+    

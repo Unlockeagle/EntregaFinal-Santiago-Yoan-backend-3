@@ -1,0 +1,100 @@
+paths:
+  /api/adoptions:
+    get:
+      summary: 🐱 Obtenemos todas las mascostas adoptadas de la DB
+      tags:
+        - Adoptions
+      responses:
+        "200":
+          description: ✅ Adopciones obtenidas con exito
+        "500":
+          description: ❌ Error en el servidor
+  /api/adoptions/{aid}:
+    get:
+      summary: 🐥 Optenemos la adopcion por su ID
+      tags:
+        - Adoptions
+      parameters:
+        - in: path
+          name: aid
+          required: true
+          description: ID de la adopcion
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ✅ Adopcion obtenidas con exito
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Adoptions"
+        "500":
+          description: ❌ Error en el servidor
+  /api/adoptions/{uid}/{pid}:
+    post:
+      summary: 🎅🐕‍🦺 Crea una adopcion entre usuario y las mascotas
+      tags:
+        - Adoptions
+      parameters:
+        - in: path
+          name: uid
+          required: true
+          description: ID del usuario que adopta la mascota
+          schema:
+            type: string
+        - in: path
+          name: pid
+          required: true
+          description: ID de la mascota
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/createAdoptions" 
+      responses:
+        "200":
+          description: ✅ Adopcion realizada exitosamente
+        "500":
+          description: ❌ Error interno del servidor          
+
+components:
+  schemas:
+    Adoptions:
+      type: object
+      properties:
+        owner:
+          type: object
+          description: El dueño de la mascota
+        pet:
+          type: object
+          description: Mascotas
+      example:
+        owner: 
+          _id: 60d6f0fbd198b97b93034c7a
+          first_name: Gunk
+        pet:
+          _id: 60d6f0fbd198b97b93034c7b
+          name: Delfin
+  requestBodies:
+    createAdoptions:
+      type: object
+      properties:
+        owner:
+          type: object
+          description: El dueño de la mascota
+        pet:
+          type: object
+          description: Mascotas
+      example:
+        owner: 
+          _id: 60d6f0fbd198b97b93034c7a
+          first_name: Gunk
+        pet:
+          _id: 60d6f0fbd198b97b93034c7b
+          name: Delfin
+
+
+  

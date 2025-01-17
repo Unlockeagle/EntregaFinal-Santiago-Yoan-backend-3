@@ -1,0 +1,209 @@
+paths:
+  /api/pets:
+    get:
+      summary: 🐕‍🦺 Obtenemos todas las mascostas de la DB
+      tags:
+        - Pets
+      responses:
+        "200":
+          description: ✅ Todas las mascotas obtenidas con exito
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Pets"
+        "500":
+          description: ❌ Error interno del servidor
+    post:
+      summary: 🤖 Este endpoint crea una mascota
+      tags:
+        - Pets
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/createPets"  
+      responses:
+        "200":
+          description: ✅ Mascota creada exitosamente
+        "400":
+          description: ⚠️ Falta informacion de la mascota
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Pets"
+        "500":
+          description: ❌ Error interno del servidor
+  /api/pets/{pid}:
+    put:
+      summary: 📝 Actualiza una mascota
+      tags:
+        - Pets
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: ID de la mascota que se desea actualizar
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updatePet"
+      responses:
+        "200":
+          description: ✅ Mascota actualizada con exito
+        "500":
+          description: ❌ Error interno del servidor
+    delete:
+      summary: 🗑️ Elimina una mascota por su ID
+      tags:
+        - Pets
+      parameters:
+      - name: pid
+        in: path
+        required: true
+        description: ID de la mascota que se desea eliminar
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ✅ Mascota eliminada con exito
+        "500":
+          description: ❌ Error interno del servidor
+  /api/pets/withimage:
+    post:
+      summary: 🐣 Crea una mascota con imagen
+      description: Este endpoint permite crear una mascota en la base de datos, incluyendo una imagen asociada
+      tags:
+        - Pets
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#components/requestBodies/createPetwithimage"                    
+      responses:
+        "200":
+           description: ✅ Mascota con imagen creada
+           content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Pets"
+        "500":
+          description: ❌ Error interno del servidor
+
+components:
+  schemas:
+    Pets:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID autogenerado por mongo DB
+        name:
+          type: string
+          description: Nombre de la mascota
+        specie:
+          type: string
+          description: Specie de la mascota
+        birthDate:
+          type: string
+          format: date
+          description: Fecha de cumpleaños de la mascota
+        adopted:
+          type: boolean
+          description: Indica si la mascota tiene dueño
+        image:
+          type: string
+          description: Imagen referencial de la mascota
+      example:
+        _id: 1232456
+        name: Sedrik
+        specie: Gecko
+        birthDate: 1988-12-28
+        adopted: false
+        image: http://via.placeholder.com/150
+  requestBodies:
+    createPets:
+      type: object
+      properties:
+        name:
+          type: string
+          description: nombre de la mascota
+        specie:
+          type: string
+          description: Specie de la mascota
+        birthDate:
+          type: string
+          format: date
+          description: Fecha de cumpleaños de la mascota
+        adopted:
+          type: boolean
+          description: Indica si la mascota tiene dueño
+        image:
+          type: string
+          description: Imagen referencia de la mascota
+      example:
+        name: Sedrik
+        specie: Gecko
+        birthDate: 1988-12-28
+        adopted: false
+        image: http://via.placeholder.com/150
+    updatePet:
+      type: object
+      properties:
+        name:
+          type: string
+          description: nombre de la mascota
+        specie:
+          type: string
+          description: Specie de la mascota
+        birthDate:
+          type: string
+          format: date
+          description: Fecha de cumpleaños de la mascota
+        adopted:
+          type: boolean
+          description: Indica si la mascota tiene dueño
+        image:
+          type: string
+          description: Imagen referencia de la mascota
+      example:
+        name: Sedrik
+        specie: Gecko
+        birthDate: 1988-12-28
+        adopted: false
+        image: http://via.placeholder.com/150
+    createPetwithimage:
+      type: object
+      properties:
+        name:
+          type: string
+          description: El nombre de la mascota
+          example: Sedrik
+        specie:
+          type: string
+          description: La especie de la mascota
+          example: Gecko
+        adopted:
+          type: boolean
+          description: Indica si la mascota tiene dueño
+          example: false
+        birthDate:
+          type: string
+          format: date
+          description: La especie de la mascota
+          example: 1988-12-28
+        image:
+          type: string
+          format: binary
+          description: Archivo de la imagen de la mascota
+
+
+
+
+
+
