@@ -3,6 +3,7 @@ import chai from "chai";
 import mongoose from "mongoose";
 import Users from "../src/dao/Users.dao.js";
 import Pets from "../src/dao/Pets.dao.js";
+import Adoptions from "../src/dao/Adoption.js"
 
 const requester = supertest("http://localhost:8080");
 const expect = chai.expect;
@@ -14,17 +15,22 @@ describe("Testing de la Web app Adoptame", () => {
         );
         this.usersDao = new Users();
         this.usersDao = new Pets();
+        this.adoptions = new Adoptions() 
+
     });
 
     //* para cada it va hacer esto
     beforeEach(async function () {
         await mongoose.connection.collections.users.drop(); //! Elimina solo la db de users
-        await mongoose.connection.collections.pets.drop(); //! Elimina solo la db de users
+        await mongoose.connection.collections.pets.drop(); //! Elimina solo la db de pets
+        await mongoose.connection.collections.adoptions.drop(); //! Elimina solo la db de adoptions
     });
 
     //#region PETS
     describe("Testing del modulo Pets", () => {
+        
         it("El empoint POST /api/pets debe crear una mascota", async () => {
+
             const tukeke = {
                 name: "Carmelo",
                 specie: "Largarto",
@@ -32,6 +38,7 @@ describe("Testing de la Web app Adoptame", () => {
             };
             const { body } = await requester.post("/api/pets").send(tukeke);
             expect(body.payload).to.have.property("_id");
+            
         });
 
         it("El empoint GET /api/pets debe retornar un Array de mascotas", async () => {
@@ -88,9 +95,9 @@ describe("Testing de la Web app Adoptame", () => {
                 password: "12341",
             };
 
-            const { _body } = await requester.post("/api/users").send(usuario);
+            const res = await requester.post("/api/users").send(usuario);
 
-            expect(_body.payload).to.have.property("pets").that.deep.equal([]);
+            expect(res._body.payload).to.have.property("pets").that.deep.equal([]);
         });
 
         it("El endpoint GET /api/users debe retornar un array", async () => {
